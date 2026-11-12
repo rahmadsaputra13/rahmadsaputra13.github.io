@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3. Konversi Nilai RPS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5" style="max-width: 500px;">
+    <div class="card shadow rounded-4 p-4">
+        <h3 class="mb-3 text-center fw-bold">Konversi Nilai RPS</h3>
+        <p class="text-muted small text-center">Skala: A (81-100), B (76-80), C (61-75), D (36-60), E (0-35)</p>
+        <div class="mb-3">
+            <label class="form-label">Masukkan Angka Nilai (0-100)</label>
+            <input type="number" id="inputNilai" class="form-control" placeholder="Contoh: 85">
+        </div>
+        <button onclick="prosesKonversi()" class="btn btn-success w-100">Konversi</button>
+
+        <div id="hasilHuruf" class="alert alert-warning mt-3 mb-0 text-center d-none"></div>
+        <div class="text-center mt-3"><a href="index.html" class="text-decoration-none">&larr; Kembali ke Menu</a></div>
+    </div>
+</div>
+
+<script>
+function konversiNilai(nilai) {
+    if (nilai >= 81 && nilai <= 100) return "A";
+    else if (nilai >= 76 && nilai <= 80) return "B";
+    else if (nilai >= 61 && nilai <= 75) return "C";
+    else if (nilai >= 36 && nilai <= 60) return "D";
+    else if (nilai >= 0 && nilai <= 35) return "E";
+    else return "Nilai tidak valid (di luar rentang 0-100)";
+}
+
+function prosesKonversi() {
+    let val = parseInt(document.getElementById('inputNilai').value);
+    let box = document.getElementById('hasilHuruf');
+    box.classList.remove('d-none');
+
+    if (isNaN(val)) {
+        box.innerHTML = "<strong>Masukkan angka yang valid!</strong>";
+        return;
+    }
+
+    let grade = konversiNilai(val);
+    box.innerHTML = `<strong>Nilai Huruf Anda: <span class="fs-4 text-danger">${grade}</span></strong>`;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4. Form & Daftar Mahasiswa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container my-5" style="max-width: 800px;">
+    <div class="card shadow rounded-4 p-4 mb-4">
+        <h3 class="mb-3 text-center fw-bold">Tambah Mahasiswa (Simulasi Storage)</h3>
+        <div id="pesan" class="alert alert-info d-none"></div>
+        <form onsubmit="simpanData(event)">
+            <div class="mb-3">
+                <label class="form-label">NIM</label>
+                <input type="text" id="nim" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nama Lengkap</label>
+                <input type="text" id="nama" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nilai</label>
+                <input type="number" id="nilai" class="form-control" min="0" max="100" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Simpan Data</button>
+        </form>
+    </div>
+
+    <div class="card shadow rounded-4 p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0 fw-bold">Daftar Mahasiswa</h4>
+            <button onclick="hapusSemua()" class="btn btn-sm btn-outline-danger">Reset Data</button>
+        </div>
+        <table class="table table-bordered table-striped text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>No</th>
+                    <th>NIM</th>
+                    <th>Nama</th>
+                    <th>Nilai</th>
+                </tr>
+            </thead>
+            <tbody id="tabel-storage"></tbody>
+        </table>
+        <div class="text-center mt-2"><a href="index.html" class="text-decoration-none">&larr; Kembali ke Menu</a></div>
+    </div>
+</div>
+
+<script>
+let dataMhs = JSON.parse(localStorage.getItem('daftar_mahasiswa')) || [];
+
+function renderTabel() {
+    let tbody = document.getElementById('tabel-storage');
+    tbody.innerHTML = "";
+    if (dataMhs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-muted">Belum ada data tersimpan.</td></tr>';
+        return;
+    }
+    dataMhs.forEach((mhs, i) => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${mhs.nim}</td>
+                <td>${mhs.nama}</td>
+                <td>${mhs.nilai}</td>
+            </tr>
+        `;
+    });
+}
+
+function simpanData(e) {
+    e.preventDefault();
+    let nim = document.getElementById('nim').value;
+    let nama = document.getElementById('nama').value;
+    let nilai = document.getElementById('nilai').value;
+
+    dataMhs.unshift({ nim, nama, nilai });
+    localStorage.setItem('daftar_mahasiswa', JSON.stringify(dataMhs));
+
+    document.getElementById('nim').value = "";
+    document.getElementById('nama').value = "";
+    document.getElementById('nilai').value = "";
+
+    let pesan = document.getElementById('pesan');
+    pesan.innerText = "Data mahasiswa berhasil disimpan ke browser!";
+    pesan.classList.remove('d-none');
+    setTimeout(() => pesan.classList.add('d-none'), 3000);
+
+    renderTabel();
+}
+
+function hapusSemua() {
+    localStorage.removeItem('daftar_mahasiswa');
+    dataMhs = [];
+    renderTabel();
+}
+
+renderTabel();
+</script>
+</body>
+</html>
